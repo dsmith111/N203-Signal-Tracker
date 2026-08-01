@@ -1,0 +1,15 @@
+{
+  "name": "Stale data warning",
+  "scanner_state": "stale",
+  "health": "degraded",
+  "contacts": [
+    {
+      "id": 1,
+      "x_mm": 600,
+      "y_mm": 2700,
+      "range_mm": 2766,
+      "signal": 290,
+      "confidence": 40
+    }
+  ]
+}

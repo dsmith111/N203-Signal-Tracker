@@ -1,0 +1,17 @@
+{
+  "name": "Tracking — one contact",
+  "scanner_state": "scanning",
+  "health": "healthy",
+  "contacts": [
+    {
+      "id": 1,
+      "x_mm": -1200,
+      "y_mm": 4300,
+      "range_mm": 4464,
+      "azimuth_cdeg": -1560,
+      "radial_velocity_mm_s": -420,
+      "signal": 760,
+      "confidence": 94
+    }
+  ]
+}

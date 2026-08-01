@@ -1,0 +1,37 @@
+{
+  "name": "Tracking — three contacts",
+  "scanner_state": "scanning",
+  "health": "healthy",
+  "contacts": [
+    {
+      "id": 1,
+      "x_mm": -2600,
+      "y_mm": 5200,
+      "range_mm": 5814,
+      "azimuth_cdeg": -2657,
+      "radial_velocity_mm_s": -180,
+      "signal": 820,
+      "confidence": 96
+    },
+    {
+      "id": 2,
+      "x_mm": 1800,
+      "y_mm": 3400,
+      "range_mm": 3847,
+      "azimuth_cdeg": 2790,
+      "radial_velocity_mm_s": 75,
+      "signal": 610,
+      "confidence": 83
+    },
+    {
+      "id": 3,
+      "x_mm": 5800,
+      "y_mm": 1100,
+      "range_mm": 5903,
+      "azimuth_cdeg": 7900,
+      "radial_velocity_mm_s": 230,
+      "signal": 430,
+      "confidence": 67
+    }
+  ]
+}

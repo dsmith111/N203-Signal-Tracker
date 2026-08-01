@@ -1,0 +1,6 @@
+{
+  "name": "Presence-only sensor",
+  "scanner_state": "presence-only",
+  "health": "healthy",
+  "contacts": []
+}

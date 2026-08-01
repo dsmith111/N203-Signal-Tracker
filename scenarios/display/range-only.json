@@ -1,0 +1,13 @@
+{
+  "name": "Range-only sensor",
+  "scanner_state": "range-only",
+  "health": "healthy",
+  "contacts": [
+    {
+      "id": 1,
+      "range_mm": 6200,
+      "signal": 540,
+      "confidence": 72
+    }
+  ]
+}

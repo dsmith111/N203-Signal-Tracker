@@ -1,0 +1,7 @@
+/build/
+/.pio/
+*.ppm
+tests/golden/display/actual/
+tests/golden/display/diffs/
+/.vscode/
+/local_planning_docs/

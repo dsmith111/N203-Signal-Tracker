@@ -1,0 +1,8 @@
+{
+  "name": "n203-display",
+  "version": "0.1.0",
+  "description": "Portable N203 Signal Tracker display state and rendering.",
+  "frameworks": "*",
+  "platforms": "*",
+  "dependencies": ["n203-radar-core"]
+}

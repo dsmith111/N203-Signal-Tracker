@@ -1,0 +1,7 @@
+{
+  "name": "n203-radar-core",
+  "version": "0.1.0",
+  "description": "Canonical, sensor-independent radar data model for N203 Signal Tracker.",
+  "frameworks": "*",
+  "platforms": "*"
+}
