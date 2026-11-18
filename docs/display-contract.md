@@ -22,9 +22,16 @@ health. It only renders position when `Contact::valid_fields` has
 `kContactAzimuth`; it makes no
 claim that all radar sources provide either form.
 
-Frames must pass `validateFrame()` before `DisplayApp` accepts them. A frame
-older than 1,200 ms is shown as stale. Offline, stale and invalid-frame states
-have explicit warning presentation.
+Frames must pass `validateFrame()` before `DisplayApp` accepts them. The caller
+supplies the local arrival time; a frame link silent for more than 1,200 ms is
+shown as stale. The remote sensor timestamp is retained for diagnostics but is
+never compared with the display board's independent clock. Offline, stale and
+invalid-frame states have explicit warning presentation.
+
+Presence is explicit: `unknown`, `clear`, and `detected` are not inferred from
+whether a contact currently has a range or position. Carrier motion is also a
+separate contract. `DopplerWarning` and `Stabilizing` add a visible warning
+without hiding valid returns or disabling selection, locking, and range input.
 
 ## Input contract
 
