@@ -46,6 +46,21 @@ n203::radar::RadarHealth radarHealth(const std::string& value) {
     return n203::radar::RadarHealth::kHealthy;
 }
 
+n203::radar::PresenceState presenceState(const std::string& value, std::uint8_t contact_count) {
+    if (value == "clear") return n203::radar::PresenceState::kClear;
+    if (value == "detected") return n203::radar::PresenceState::kDetected;
+    if (value == "unknown") return n203::radar::PresenceState::kUnknown;
+    return contact_count == 0U ? n203::radar::PresenceState::kClear
+                               : n203::radar::PresenceState::kDetected;
+}
+
+n203::radar::MotionState motionState(const std::string& value) {
+    if (value == "tracking") return n203::radar::MotionState::kTracking;
+    if (value == "doppler-warning") return n203::radar::MotionState::kDopplerWarning;
+    if (value == "stabilizing") return n203::radar::MotionState::kStabilizing;
+    return n203::radar::MotionState::kUnknown;
+}
+
 std::uint32_t capabilitiesFor(n203::radar::MeasurementState state) {
     using namespace n203::radar;
     switch (state) {
@@ -98,6 +113,12 @@ bool ScenarioRadarSource::loadFromFile(const std::string& path, std::string& err
             contact.valid_fields |= n203::radar::kContactRadialVelocity;
         }
     }
+
+    frame_.presence = presenceState(stringValue(document, "presence"), frame_.contact_count);
+    const std::string motion = stringValue(document, "motion");
+    frame_.motion = motionState(motion);
+    frame_.motion_quality = static_cast<std::uint8_t>(integerValue(
+        document, "motion_quality", frame_.motion == n203::radar::MotionState::kUnknown ? 0 : 100));
 
     loaded_ = true;
     return true;

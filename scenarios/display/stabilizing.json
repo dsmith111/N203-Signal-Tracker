@@ -1,0 +1,20 @@
+{
+  "name": "Carrier motion stabilizing",
+  "scanner_state": "scanning",
+  "health": "healthy",
+  "presence": "detected",
+  "motion": "stabilizing",
+  "motion_quality": 68,
+  "contacts": [
+    {
+      "id": 5,
+      "x_mm": -1200,
+      "y_mm": 4550,
+      "range_mm": 4705,
+      "azimuth_cdeg": -1477,
+      "radial_velocity_mm_s": -90,
+      "signal": 630,
+      "confidence": 81
+    }
+  ]
+}

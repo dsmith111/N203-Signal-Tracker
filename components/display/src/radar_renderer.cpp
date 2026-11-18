@@ -41,6 +41,54 @@ Color scannerColor(ScannerPresentation scanner) {
     }
 }
 
+const char* statusLabel(const DisplayState& state) {
+    switch (state.scanner) {
+        case ScannerPresentation::kStarting:
+        case ScannerPresentation::kStale:
+        case ScannerPresentation::kOffline:
+        case ScannerPresentation::kInvalidFrame:
+            return scannerLabel(state.scanner);
+        default:
+            break;
+    }
+
+    if (state.frame.motion == radar::MotionState::kDopplerWarning) {
+        return "DOPPLER WARN";
+    }
+    if (state.frame.motion == radar::MotionState::kStabilizing) {
+        return "STABILIZING";
+    }
+    if (state.scanner == ScannerPresentation::kPresenceOnly) {
+        switch (state.frame.presence) {
+            case radar::PresenceState::kClear: return "AREA CLEAR";
+            case radar::PresenceState::kDetected: return "PRES DETECT";
+            case radar::PresenceState::kUnknown: return "PRESENCE ?";
+        }
+    }
+    return scannerLabel(state.scanner);
+}
+
+Color statusColor(const DisplayState& state) {
+    if (state.scanner == ScannerPresentation::kStarting ||
+        state.scanner == ScannerPresentation::kStale ||
+        state.scanner == ScannerPresentation::kOffline ||
+        state.scanner == ScannerPresentation::kInvalidFrame) {
+        return scannerColor(state.scanner);
+    }
+    if (state.frame.motion == radar::MotionState::kDopplerWarning ||
+        state.frame.motion == radar::MotionState::kStabilizing) {
+        return theme::kWarning;
+    }
+    if (state.scanner == ScannerPresentation::kPresenceOnly) {
+        switch (state.frame.presence) {
+            case radar::PresenceState::kClear: return theme::kMutedText;
+            case radar::PresenceState::kDetected: return theme::kPrimary;
+            case radar::PresenceState::kUnknown: return theme::kWarning;
+        }
+    }
+    return scannerColor(state.scanner);
+}
+
 Point sectorPoint(int angle_degrees, int radius) {
     const double angle = static_cast<double>(angle_degrees) * kPi / 180.0;
     const Point origin = DisplayLayout::radarCenter();
@@ -146,18 +194,21 @@ bool drawContact(
         }
     }
 
+    const bool selected = state.has_selected_contact && state.selected_contact_id == contact.id;
+    const bool locked = selected && state.target_locked;
+    const Color contact_body = locked ? theme::kLocked : theme::kTargetBody;
+    const Color tracking_color = locked ? theme::kLocked : theme::kSelection;
     const int halo_radius = 7 + static_cast<int>(contact.confidence) / 28;
     graphics.fillCircle(point.x, point.y, halo_radius, theme::kTargetHalo);
-    graphics.fillCircle(point.x, point.y, 5, theme::kTargetBody);
+    graphics.fillCircle(point.x, point.y, 5, contact_body);
     graphics.fillCircle(point.x, point.y, 2, theme::kTargetCore);
     graphics.fillRect(point.x + halo_radius - 1, point.y + static_cast<int>((jitter_seed >> 8U) % 3U) - 1,
-                      2, 2, theme::kTargetBody);
+                      2, 2, contact_body);
 
-    const bool selected = state.has_selected_contact && state.selected_contact_id == contact.id;
     if (selected) {
-        drawTrackingBrackets(graphics, point, halo_radius + 5, theme::kSelection);
+        drawTrackingBrackets(graphics, point, halo_radius + 5, tracking_color);
         const std::string tracking_label = (state.target_locked ? "LOCK " : "TRK ") + std::to_string(contact.id);
-        graphics.drawText(point.x + halo_radius + 8, point.y - 3, tracking_label, theme::kSelection);
+        graphics.drawText(point.x + halo_radius + 8, point.y - 3, tracking_label, tracking_color);
     }
     return true;
 }
@@ -178,12 +229,15 @@ void drawEdgeIndicators(DisplayCanvas& graphics, std::uint8_t contact_count) {
     }
 }
 
-void drawCrtOverlay(DisplayCanvas& graphics, std::uint32_t now_ms) {
+void drawCrtOverlay(DisplayCanvas& graphics) {
     for (int y = 3; y < DisplayLayout::kLogicalHeight; y += 4) {
         graphics.drawLine(1, y, DisplayLayout::kLogicalWidth - 2, y, theme::kScanline);
     }
 
-    std::uint32_t noise = 0x91E10DA5U ^ (now_ms / 33U);
+    // Keep the sparse phosphor grain fixed. Animating all 42 specks dirties
+    // dozens of otherwise static SPI tiles on every frame without adding
+    // useful motion information.
+    std::uint32_t noise = 0x91E10DA5U;
     for (int speck = 0; speck < 42; ++speck) {
         noise = noise * 1664525U + 1013904223U;
         const int x = static_cast<int>(noise % DisplayLayout::kLogicalWidth);
@@ -213,21 +267,30 @@ void RadarRenderer::render(DisplayCanvas& graphics, const DisplayState& state, s
     drawEdgeIndicators(graphics, visible_contact_count);
 
     graphics.drawText(12, 10, "N203/MTRK", theme::kMutedText);
-    graphics.drawText(204, 10, scannerLabel(state.scanner), scannerColor(state.scanner));
+    const char* status_label = statusLabel(state);
+    const Color status_color = statusColor(state);
+    const int status_width = static_cast<int>(std::char_traits<char>::length(status_label)) * 6;
+    graphics.drawText((DisplayLayout::kLogicalWidth - status_width) / 2, 10,
+                      status_label, status_color);
     graphics.drawText(419, 10, "MOT " + std::to_string(visible_contact_count), theme::kText);
     if (state.has_selected_contact) {
         graphics.drawText(12, 26,
                           (state.target_locked ? "LOCK " : "TRACK ") + std::to_string(state.selected_contact_id),
-                          theme::kSelection);
+                          state.target_locked ? theme::kLocked : theme::kSelection);
     } else {
         graphics.drawText(12, 26, "TRACK AUTO", theme::kMutedText);
     }
 
-    if (state.scanner == ScannerPresentation::kStale || state.scanner == ScannerPresentation::kOffline ||
-        state.scanner == ScannerPresentation::kInvalidFrame) {
+    const bool show_status_banner =
+        state.scanner == ScannerPresentation::kStale ||
+        state.scanner == ScannerPresentation::kOffline ||
+        state.scanner == ScannerPresentation::kInvalidFrame ||
+        state.frame.motion == radar::MotionState::kDopplerWarning ||
+        state.frame.motion == radar::MotionState::kStabilizing;
+    if (show_status_banner) {
         graphics.fillRect(174, 38, 132, 22, theme::kPanel);
-        graphics.strokeRect(174, 38, 132, 22, scannerColor(state.scanner));
-        graphics.drawText(190, 46, scannerLabel(state.scanner), scannerColor(state.scanner));
+        graphics.strokeRect(174, 38, 132, 22, status_color);
+        graphics.drawText(240 - status_width / 2, 46, status_label, status_color);
     }
 
     graphics.fillRect(0, 282, DisplayLayout::kLogicalWidth, 38, theme::kPanel);
@@ -245,7 +308,7 @@ void RadarRenderer::render(DisplayCanvas& graphics, const DisplayState& state, s
     graphics.drawText((DisplayLayout::kLogicalWidth - distance_width) / 2, 291, distance, theme::kTargetCore, 3);
     graphics.drawText(422, 299, "MOT " + std::to_string(visible_contact_count), theme::kText);
 
-    drawCrtOverlay(graphics, now_ms);
+    drawCrtOverlay(graphics);
 }
 
 }  // namespace n203::display

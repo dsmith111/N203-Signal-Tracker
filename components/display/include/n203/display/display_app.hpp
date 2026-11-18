@@ -10,7 +10,7 @@ namespace n203::display {
 
 class DisplayApp {
 public:
-    void acceptRadarFrame(const radar::RadarFrame& frame);
+    void acceptRadarFrame(const radar::RadarFrame& frame, std::uint32_t received_ms);
     void acceptInput(const DisplayInput& input);
     void update(std::uint32_t now_ms);
 

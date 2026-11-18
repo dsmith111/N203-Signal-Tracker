@@ -2,5 +2,8 @@
   "name": "Presence-only sensor",
   "scanner_state": "presence-only",
   "health": "healthy",
+  "presence": "detected",
+  "motion": "tracking",
+  "motion_quality": 100,
   "contacts": []
 }

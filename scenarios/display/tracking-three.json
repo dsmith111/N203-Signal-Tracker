@@ -2,6 +2,9 @@
   "name": "Tracking — three contacts",
   "scanner_state": "scanning",
   "health": "healthy",
+  "presence": "detected",
+  "motion": "tracking",
+  "motion_quality": 100,
   "contacts": [
     {
       "id": 1,

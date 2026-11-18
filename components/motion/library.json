@@ -1,0 +1,7 @@
+{
+  "name": "n203-motion",
+  "version": "0.1.0",
+  "description": "Portable IMU samples and motion telemetry calculations.",
+  "frameworks": "*",
+  "platforms": "*"
+}

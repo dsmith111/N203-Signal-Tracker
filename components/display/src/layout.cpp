@@ -28,4 +28,12 @@ Rect DisplayLayout::rangeIncreaseBounds() {
     return {62, 286, 48, 26};
 }
 
+Rect DisplayLayout::rangeDecreaseTouchBounds() {
+    return {0, 282, 61, 38};
+}
+
+Rect DisplayLayout::rangeIncreaseTouchBounds() {
+    return {61, 282, 55, 38};
+}
+
 }  // namespace n203::display

@@ -1,0 +1,20 @@
+{
+  "name": "Carrier motion Doppler warning",
+  "scanner_state": "scanning",
+  "health": "healthy",
+  "presence": "detected",
+  "motion": "doppler-warning",
+  "motion_quality": 30,
+  "contacts": [
+    {
+      "id": 5,
+      "x_mm": -1400,
+      "y_mm": 4400,
+      "range_mm": 4617,
+      "azimuth_cdeg": -1765,
+      "radial_velocity_mm_s": -260,
+      "signal": 590,
+      "confidence": 74
+    }
+  ]
+}

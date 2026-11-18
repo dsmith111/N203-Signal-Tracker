@@ -2,6 +2,7 @@
   "name": "Stale data warning",
   "scanner_state": "stale",
   "health": "degraded",
+  "presence": "detected",
   "contacts": [
     {
       "id": 1,

@@ -10,7 +10,7 @@ constexpr std::uint32_t kStaleAfterMs = 1200;
 constexpr int kContactTouchRadiusSquared = 14 * 14;
 }
 
-void DisplayApp::acceptRadarFrame(const radar::RadarFrame& frame) {
+void DisplayApp::acceptRadarFrame(const radar::RadarFrame& frame, std::uint32_t received_ms) {
     if (radar::validateFrame(frame) != radar::FrameValidationError::kNone) {
         invalid_frame_received_ = true;
         return;
@@ -18,7 +18,7 @@ void DisplayApp::acceptRadarFrame(const radar::RadarFrame& frame) {
 
     invalid_frame_received_ = false;
     state_.frame = frame;
-    last_frame_received_ms_ = frame.sensor_timestamp_ms;
+    last_frame_received_ms_ = received_ms;
     received_frame_ = true;
 
     if (state_.has_selected_contact) {
@@ -41,11 +41,11 @@ void DisplayApp::acceptInput(const DisplayInput& input) {
         return;
     }
 
-    if (DisplayLayout::rangeDecreaseBounds().contains(input.point)) {
+    if (DisplayLayout::rangeDecreaseTouchBounds().contains(input.point)) {
         state_.display_range_mm = RangeControl::decrease(state_.display_range_mm);
         return;
     }
-    if (DisplayLayout::rangeIncreaseBounds().contains(input.point)) {
+    if (DisplayLayout::rangeIncreaseTouchBounds().contains(input.point)) {
         state_.display_range_mm = RangeControl::increase(state_.display_range_mm);
         return;
     }

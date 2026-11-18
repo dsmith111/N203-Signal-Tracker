@@ -2,5 +2,8 @@
   "name": "Tracking — no contacts",
   "scanner_state": "scanning",
   "health": "healthy",
+  "presence": "clear",
+  "motion": "tracking",
+  "motion_quality": 100,
   "contacts": []
 }

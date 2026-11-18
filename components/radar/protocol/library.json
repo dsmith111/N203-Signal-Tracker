@@ -1,0 +1,8 @@
+{
+  "name": "n203-radar-protocol",
+  "version": "0.1.0",
+  "description": "Typed COBS- and CRC-protected UART link for N203 scanner nodes.",
+  "frameworks": "*",
+  "platforms": "*",
+  "dependencies": ["n203-radar-core"]
+}

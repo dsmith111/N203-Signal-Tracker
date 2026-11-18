@@ -1,0 +1,7 @@
+{
+  "name": "n203-radar-c4001",
+  "version": "0.1.0",
+  "description": "Bounded C4001 ASCII framing and presence/range normalization.",
+  "frameworks": "*",
+  "platforms": "*"
+}

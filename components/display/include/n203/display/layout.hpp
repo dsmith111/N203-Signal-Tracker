@@ -25,6 +25,8 @@ struct DisplayLayout {
     [[nodiscard]] static Rect radarBounds();
     [[nodiscard]] static Rect rangeDecreaseBounds();
     [[nodiscard]] static Rect rangeIncreaseBounds();
+    [[nodiscard]] static Rect rangeDecreaseTouchBounds();
+    [[nodiscard]] static Rect rangeIncreaseTouchBounds();
 };
 
 }  // namespace n203::display

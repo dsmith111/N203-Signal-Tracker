@@ -1,0 +1,9 @@
+{
+  "name": "Presence sensor unknown",
+  "scanner_state": "presence-only",
+  "health": "healthy",
+  "presence": "unknown",
+  "motion": "tracking",
+  "motion_quality": 100,
+  "contacts": []
+}

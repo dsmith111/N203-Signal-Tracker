@@ -1,0 +1,8 @@
+{
+  "name": "n203-radar-simulated",
+  "version": "0.1.0",
+  "description": "Portable deterministic radar scenarios for N203 link and display testing.",
+  "frameworks": "*",
+  "platforms": "*",
+  "dependencies": ["n203-radar-core"]
+}

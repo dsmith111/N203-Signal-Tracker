@@ -51,7 +51,7 @@ int runLive(
         radar.update(now_ms);
         n203::radar::RadarFrame frame{};
         if (radar.poll(frame)) {
-            app.acceptRadarFrame(frame);
+            app.acceptRadarFrame(frame, now_ms);
         }
         app.acceptInput(scripted_touch.poll());
         app.acceptInput(live_input);
@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
         radar.update(now_ms);
         n203::radar::RadarFrame frame{};
         if (radar.poll(frame)) {
-            app.acceptRadarFrame(frame);
+            app.acceptRadarFrame(frame, now_ms);
         }
         app.update(now_ms);
     }

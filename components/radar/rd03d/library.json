@@ -1,0 +1,7 @@
+{
+  "name": "n203-radar-rd03d",
+  "version": "0.1.0",
+  "description": "Bounded raw UART framing for the Ai-Thinker RD-03D radar.",
+  "frameworks": "*",
+  "platforms": "*"
+}
