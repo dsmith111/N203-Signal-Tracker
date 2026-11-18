@@ -5,3 +5,24 @@ tests/golden/display/actual/
 tests/golden/display/diffs/
 /.vscode/
 /local_planning_docs/
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated CAD is not kept in git; run the generators in hardware/mechanical.
+# The preview images of the current bracer are the exception.
+/hardware/mechanical/models/
+/hardware/mechanical/bracer_v3/models/*
+!/hardware/mechanical/bracer_v3/models/*.png
+
+# Personal arm measurements for the bracer (see hardware/mechanical/arm_fit.py)
+/hardware/mechanical/arm_fit.local.json
+
+# Third-party CAD that is not redistributed
+# (see hardware/mechanical/vendor/pololu/README.md)
+/hardware/mechanical/vendor/**/*.step
+
+# Earlier bracer versions, kept locally only
+/hardware/mechanical/bracer_v1/
+/hardware/mechanical/bracer_poc/
